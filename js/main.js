@@ -140,7 +140,7 @@ $overlay.click(function(event){
 						;
 
 					}
-					if (imgTitle.indexOf(filter) > 0 ) {
+					if (imgTitle.indexOf(filter) !== -1 ) {
 						$(this).parent().parent().fadeIn('slow').appendTo("#image-gallery");
 						$galleryLength = $("#image-gallery li").length;
 					}
@@ -150,14 +150,16 @@ $overlay.click(function(event){
 				//Move images back into the main gallery from the hidden gallery.
 				$("#testGallery li a img").each(function () {
 					var imgTitle = $(this).attr("title").toUpperCase();
-					if (imgTitle.indexOf(filter) > 0 ) {
+					if (imgTitle.indexOf(filter) > -1 ) {
 						$(this).parent().parent().fadeIn('slow').appendTo("#image-gallery");
 						$galleryLength = $("#image-gallery li").length;
 						console.log("Take it back!");
 					}
 				});
 
-			
+				if ($galleryLength === 0) {
+					console.log("No matching results found.")
+				}
 
 			
 
