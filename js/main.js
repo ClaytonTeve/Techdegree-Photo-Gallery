@@ -5,7 +5,7 @@ var $caption = $("<p></p>");
 var $prevArrow = $("<div id='prevArrow'></div>");
 var $nextArrow = $("<div id='nextArrow'></div>");
 var $galleryLength = $("#image-gallery li").length;
-var $testGallery = $('<ul id="testGallery"></ul>');
+var $filteredImages = $('<ul id="filtered-images"></ul>');
 var $filterAlert = $('<div id="filter-alert"></div>');
 
 //Keep track of the image index for previous and next arrows.
@@ -59,7 +59,7 @@ $("#image-gallery a").click(function(event){
 	$('#overlay').show();
 
 	//Show alert if results are filtered results
-	if ($("#testGallery li").length > 0) {
+	if ($("#filtered-images li").length > 0) {
 		filterAlert();
 		$("#filter-alert").show();
 	} else {
@@ -126,34 +126,27 @@ $overlay.click(function(event){
 		$(input)
 		  .change( function () {
 			var filter = $(this).val();
+			filter = filter.toUpperCase();
+			$('body').append($filteredImages);
+
 			if(filter) {
 
-				//Move filtered list elements into a hidden list and hide them.
+				//Move filtered list elements into a hidden list and hide them
+
 				$("#image-gallery li a img").each(function () {
 					var imgTitle = $(this).attr("title").toUpperCase();
-					filter = filter.toUpperCase();
-					$('body').append($testGallery);
-
 					if (imgTitle.indexOf(filter) === -1 ) {
-						$(this).parent().parent().fadeOut('slow').appendTo("#testGallery");
+						$(this).parent().parent().fadeOut('slow').appendTo("#filtered-images");
 						$galleryLength = $("#image-gallery li").length;
-						;
-
-					}
-					if (imgTitle.indexOf(filter) !== -1 ) {
-						$(this).parent().parent().fadeIn('slow').appendTo("#image-gallery");
-						$galleryLength = $("#image-gallery li").length;
-					}
-
+					}				
 				});
 
 				//Move images back into the main gallery from the hidden gallery.
-				$("#testGallery li a img").each(function () {
+				$("#filtered-images li a img").each(function () {
 					var imgTitle = $(this).attr("title").toUpperCase();
-					if (imgTitle.indexOf(filter) > -1 ) {
+					if (imgTitle.indexOf(filter) !== -1 ) {
 						$(this).parent().parent().fadeIn('slow').appendTo("#image-gallery");
 						$galleryLength = $("#image-gallery li").length;
-						console.log("Take it back!");
 					}
 				});
 
@@ -166,7 +159,7 @@ $overlay.click(function(event){
 			} else {
 				
 				//If search field is emptied add all images to the main gallery
-				$("#testGallery li").each(function(){
+				$("#filtered-images li").each(function(){
 					$(this).appendTo("#image-gallery");
 				});
 
